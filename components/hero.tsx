@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ArrowUpRight, Mail } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import {
   GithubIcon,
   LinkedinIcon,
@@ -55,31 +54,29 @@ export function Hero() {
         }}
       />
 
-      <div className="relative mx-auto max-w-6xl px-6 pb-20 pt-36 md:pt-44">
-        <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-8">
-          {/* Left column — content */}
-          <div className="flex-1">
-            <motion.p
+      <div className="relative mx-auto max-w-6xl px-6 pb-24 pt-36 md:pt-44">
+        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-[75%_25%] lg:grid-cols-[80%_20%]">
+          {/* LEFT — main hero content (80%) */}
+          <div>
+            <motion.h1
               custom={0}
               initial="hidden"
               animate="show"
               variants={fadeUp}
-              className="mb-5 font-mono text-sm uppercase tracking-widest text-primary"
+              className="text-balance text-5xl font-bold leading-[1.02] tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-8xl"
             >
-              Full Stack Developer
-            </motion.p>
+              Ahmad Febriansyah<span className="text-primary">.</span>
+            </motion.h1>
 
-            <motion.h1
+            <motion.p
               custom={1}
               initial="hidden"
               animate="show"
               variants={fadeUp}
-              className="text-balance text-5xl font-bold leading-[1.02] tracking-tight text-foreground sm:text-6xl md:text-7xl"
+              className="mt-6 font-mono text-lg uppercase tracking-widest text-primary sm:text-xl"
             >
-              Ahmad
-              <br />
-              Febriansyah<span className="text-primary">.</span>
-            </motion.h1>
+              Full Stack Developer
+            </motion.p>
 
             <motion.div
               custom={2}
@@ -98,45 +95,12 @@ export function Hero() {
             </motion.div>
           </div>
 
-          {/* Middle column — floating profile */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="flex justify-center lg:justify-end"
-          >
-            <motion.div
-              animate={{ y: [0, -14, 0] }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="relative"
-            >
-              <div
-                aria-hidden="true"
-                className="absolute -inset-6 rounded-full bg-primary/20 blur-3xl"
-              />
-              <div className="relative h-56 w-56 overflow-hidden rounded-full border border-border bg-card shadow-2xl sm:h-64 sm:w-64 md:h-72 md:w-72">
-                <Image
-                  src="/images/profile.png"
-                  alt="Portrait of Ahmad Febriansyah"
-                  fill
-                  sizes="(min-width: 768px) 288px, 224px"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Right column — vertical social rail */}
+          {/* RIGHT — vertical social bar (20%) */}
           <motion.ul
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex flex-row items-center justify-center gap-3 lg:flex-col"
+            className="flex flex-row items-center justify-center gap-4 md:flex-col"
           >
             {socials.map((social) => (
               <li key={social.label} className="group relative">
@@ -145,14 +109,14 @@ export function Hero() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  whileHover={{ scale: 1.12 }}
+                  whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 0.95 }}
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
+                  className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-all duration-300 hover:border-primary hover:text-primary hover:shadow-[0_0_20px_-2px_var(--primary)]"
                 >
-                  <social.icon className="h-4 w-4" />
+                  <social.icon className="h-5 w-5" />
                 </motion.a>
                 {/* tooltip */}
-                <span className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-popover px-2 py-1 text-xs text-popover-foreground opacity-0 shadow-md transition-opacity group-hover:opacity-100 lg:left-auto lg:right-full lg:top-1/2 lg:mt-0 lg:mr-2 lg:-translate-x-0 lg:-translate-y-1/2">
+                <span className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md border border-border bg-popover px-2 py-1 text-xs text-popover-foreground opacity-0 shadow-md transition-opacity group-hover:opacity-100 md:left-auto md:right-full md:top-1/2 md:mr-2 md:mt-0 md:-translate-y-1/2 md:translate-x-0">
                   {social.label}
                 </span>
               </li>
