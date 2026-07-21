@@ -1,190 +1,324 @@
 'use client'
 
 import { useEffect, useState, type FormEvent } from 'react'
-import { X, Mail, Check, Send, MapPin, Briefcase } from 'lucide-react'
-import { GithubIcon, LinkedinIcon } from '@/components/brand-icons'
+import { AnimatePresence, motion } from 'framer-motion'
+import {
+  X,
+  User,
+  Briefcase,
+  Wrench,
+  Target,
+  Heart,
+  Mail,
+  Send,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+} from 'lucide-react'
+import { sendContact } from '@/app/actions/send-contact'
 
-const socials = [
-  { icon: GithubIcon, label: 'GitHub', href: 'https://github.com' },
-  { icon: LinkedinIcon, label: 'LinkedIn', href: 'https://linkedin.com' },
-  { icon: Mail, label: 'Email', href: 'mailto:hello@ahmadfebriansyah.dev' },
-]
-
-const facts = [
-  { icon: Briefcase, label: 'Full Stack Developer & Data Engineer' },
-  { icon: MapPin, label: 'Based in Indonesia — available remotely' },
-]
-
-export function AboutModal({
-  open,
-  onClose,
-}: {
+type AboutModalProps = {
   open: boolean
   onClose: () => void
-}) {
-  const [submitted, setSubmitted] = useState(false)
+}
 
+const bioSections = [
+  {
+    icon: User,
+    title: 'About Me',
+    body: 'Hi, I\u2019m Ahmad Febriansyah, a Full Stack Developer who loves turning complex problems into clean, reliable products.',
+  },
+  {
+    icon: Briefcase,
+    title: 'Experience',
+    body: 'Building end-to-end web applications and designing data pipelines that move and transform information at scale.',
+  },
+  {
+    icon: Wrench,
+    title: 'Skills',
+    body: 'Laravel, PHP, C#, .NET, Apache NiFi, JavaScript, jQuery, MySQL, HTML5 and CSS3.',
+  },
+  {
+    icon: Target,
+    title: 'Current Focus',
+    body: 'Crafting performant full-stack systems and robust data integration workflows.',
+  },
+  {
+    icon: Heart,
+    title: 'Interests',
+    body: 'Open-source, clean architecture, automation, and continuously learning new technologies.',
+  },
+]
+
+type FormErrors = {
+  name?: string
+  email?: string
+  message?: string
+}
+
+export function AboutModal({ open, onClose }: AboutModalProps) {
+  const [values, setValues] = useState({ name: '', email: '', message: '' })
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>(
+    'idle',
+  )
+  const [feedback, setFeedback] = useState('')
+
+  // close on Escape + lock body scroll while open
   useEffect(() => {
-    function onKey(e: KeyboardEvent) {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     }
-    if (open) {
-      document.addEventListener('keydown', onKey)
-      document.body.style.overflow = 'hidden'
-    }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
   }, [open, onClose])
 
-  if (!open) return null
+  function validate(): boolean {
+    const next: FormErrors = {}
+    if (!values.name.trim()) next.name = 'Please enter your name.'
+    if (!values.email.trim()) {
+      next.email = 'Please enter your email.'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+      next.email = 'Please enter a valid email address.'
+    }
+    if (!values.message.trim()) next.message = 'Please enter a message.'
+    setErrors(next)
+    return Object.keys(next).length === 0
+  }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setSubmitted(true)
-    e.currentTarget.reset()
-    window.setTimeout(() => setSubmitted(false), 4000)
+    if (status === 'sending') return
+    if (!validate()) return
+
+    setStatus('sending')
+    setFeedback('')
+
+    const result = await sendContact(values)
+
+    if (result.ok) {
+      setStatus('sent')
+      setFeedback('Message sent successfully!')
+      setValues({ name: '', email: '', message: '' })
+      setTimeout(() => {
+        setStatus('idle')
+        setFeedback('')
+        onClose()
+      }, 1800)
+    } else {
+      setStatus('error')
+      setFeedback(result.error)
+    }
   }
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label="About Ahmad Febriansyah"
-      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
-    >
-      <button
-        type="button"
-        aria-label="Close dialog"
-        onClick={onClose}
-        className="absolute inset-0 bg-background/70 backdrop-blur-sm"
-      />
-
-      <div className="relative z-10 grid max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-border bg-card shadow-2xl md:grid-cols-2">
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background/60 text-muted-foreground transition-colors hover:text-foreground"
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          aria-modal="true"
+          role="dialog"
+          aria-label="About Ahmad Febriansyah and contact form"
         >
-          <X className="h-4 w-4" />
-        </button>
+          {/* backdrop */}
+          <button
+            aria-label="Close dialog"
+            className="absolute inset-0 cursor-default bg-foreground/40 backdrop-blur-sm"
+            onClick={onClose}
+          />
 
-        {/* Left: About */}
-        <div className="border-b border-border p-6 md:border-b-0 md:border-r md:p-8">
-          <p className="mb-3 font-mono text-xs uppercase tracking-widest text-primary">
-            About Me
-          </p>
-          <h2 className="text-balance text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
-            Ahmad Febriansyah
-          </h2>
-          <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
-            I&apos;m a full stack developer and data engineer who builds robust,
-            end-to-end web applications and designs data pipelines that move and
-            transform information at scale — turning messy systems into fast,
-            reliable products.
-          </p>
-
-          <ul className="mt-6 space-y-3">
-            {facts.map((fact) => (
-              <li
-                key={fact.label}
-                className="flex items-center gap-3 text-sm text-muted-foreground"
-              >
-                <fact.icon className="h-4 w-4 shrink-0 text-primary" />
-                {fact.label}
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            {socials.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
-              >
-                <social.icon className="h-4 w-4" />
-                {social.label}
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Right: Send message */}
-        <form onSubmit={handleSubmit} className="p-6 md:p-8">
-          <p className="mb-3 font-mono text-xs uppercase tracking-widest text-primary">
-            Send a message
-          </p>
-          <div className="grid gap-5">
-            <div className="grid gap-2">
-              <label
-                htmlFor="modal-name"
-                className="font-mono text-xs uppercase tracking-widest text-muted-foreground"
-              >
-                Name
-              </label>
-              <input
-                id="modal-name"
-                name="name"
-                type="text"
-                required
-                placeholder="Your name"
-                className="rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-primary/60 focus:ring-2 focus:ring-primary/20"
-              />
-            </div>
-            <div className="grid gap-2">
-              <label
-                htmlFor="modal-email"
-                className="font-mono text-xs uppercase tracking-widest text-muted-foreground"
-              >
-                Email
-              </label>
-              <input
-                id="modal-email"
-                name="email"
-                type="email"
-                required
-                placeholder="you@example.com"
-                className="rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-primary/60 focus:ring-2 focus:ring-primary/20"
-              />
-            </div>
-            <div className="grid gap-2">
-              <label
-                htmlFor="modal-message"
-                className="font-mono text-xs uppercase tracking-widest text-muted-foreground"
-              >
-                Message
-              </label>
-              <textarea
-                id="modal-message"
-                name="message"
-                required
-                rows={4}
-                placeholder="Tell me about your project..."
-                className="resize-none rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-primary/60 focus:ring-2 focus:ring-primary/20"
-              />
-            </div>
+          <motion.div
+            className="relative z-10 flex max-h-[90vh] w-full max-w-4xl flex-col overflow-y-auto rounded-2xl border border-border bg-card shadow-2xl md:flex-row md:overflow-hidden"
+            initial={{ opacity: 0, scale: 0.94, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.94, y: 20 }}
+            transition={{ type: 'spring', duration: 0.4, bounce: 0.2 }}
+          >
             <button
-              type="submit"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              onClick={onClose}
+              aria-label="Close"
+              className="absolute right-4 top-4 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background/70 text-muted-foreground transition-colors hover:text-foreground"
             >
-              {submitted ? (
-                <>
-                  <Check className="h-4 w-4" /> Message sent
-                </>
-              ) : (
-                <>
-                  <Send className="h-4 w-4" /> Send message
-                </>
-              )}
+              <X className="h-4 w-4" />
             </button>
-          </div>
-        </form>
-      </div>
+
+            {/* Left — bio */}
+            <div className="relative w-full overflow-y-auto bg-muted/50 p-8 md:w-1/2">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 opacity-[0.4]"
+                style={{
+                  backgroundImage:
+                    'radial-gradient(circle at 20% 10%, color-mix(in oklch, var(--primary) 22%, transparent), transparent 45%)',
+                }}
+              />
+              <div className="relative space-y-6">
+                {bioSections.map((section) => (
+                  <div key={section.title} className="flex gap-3">
+                    <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <section.icon className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <h3 className="text-sm font-semibold text-foreground">
+                        {section.title}
+                      </h3>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                        {section.body}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right — contact form */}
+            <div className="w-full overflow-y-auto p-8 md:w-1/2">
+              <div className="mb-6 flex items-center gap-2">
+                <Mail className="h-5 w-5 text-primary" />
+                <h2 className="text-lg font-semibold text-foreground">
+                  Get in touch
+                </h2>
+              </div>
+
+              <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                <Field
+                  id="name"
+                  label="Name"
+                  value={values.name}
+                  error={errors.name}
+                  onChange={(v) => setValues((s) => ({ ...s, name: v }))}
+                  placeholder="Your name"
+                />
+                <Field
+                  id="email"
+                  label="Email"
+                  type="email"
+                  value={values.email}
+                  error={errors.email}
+                  onChange={(v) => setValues((s) => ({ ...s, email: v }))}
+                  placeholder="you@example.com"
+                />
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="mb-1.5 block text-sm font-medium text-foreground"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    rows={4}
+                    value={values.message}
+                    onChange={(e) =>
+                      setValues((s) => ({ ...s, message: e.target.value }))
+                    }
+                    placeholder="Tell me about your project..."
+                    className="w-full resize-none rounded-xl border border-input bg-background px-4 py-2.5 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/30"
+                  />
+                  {errors.message && (
+                    <p className="mt-1 text-xs text-destructive">
+                      {errors.message}
+                    </p>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={status === 'sending'}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {status === 'sending' && (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Sending...
+                    </>
+                  )}
+                  {status === 'sent' && (
+                    <>
+                      <CheckCircle2 className="h-4 w-4" />
+                      Message sent!
+                    </>
+                  )}
+                  {(status === 'idle' || status === 'error') && (
+                    <>
+                      Send Message
+                      <Send className="h-4 w-4" />
+                    </>
+                  )}
+                </button>
+
+                {feedback && (
+                  <div
+                    role="status"
+                    aria-live="polite"
+                    className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm ${
+                      status === 'error'
+                        ? 'border-destructive/30 bg-destructive/10 text-destructive'
+                        : 'border-primary/30 bg-primary/10 text-primary'
+                    }`}
+                  >
+                    {status === 'error' ? (
+                      <AlertCircle className="h-4 w-4 shrink-0" />
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4 shrink-0" />
+                    )}
+                    {feedback}
+                  </div>
+                )}
+              </form>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+type FieldProps = {
+  id: string
+  label: string
+  value: string
+  error?: string
+  placeholder?: string
+  type?: string
+  onChange: (value: string) => void
+}
+
+function Field({
+  id,
+  label,
+  value,
+  error,
+  placeholder,
+  type = 'text',
+  onChange,
+}: FieldProps) {
+  return (
+    <div>
+      <label
+        htmlFor={id}
+        className="mb-1.5 block text-sm font-medium text-foreground"
+      >
+        {label}
+      </label>
+      <input
+        id={id}
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/30"
+      />
+      {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
     </div>
   )
 }
