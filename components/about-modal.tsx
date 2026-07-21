@@ -13,7 +13,9 @@ import {
   Send,
   Loader2,
   CheckCircle2,
+  AlertCircle,
 } from 'lucide-react'
+import { sendContact } from '@/app/actions/send-contact'
 
 type AboutModalProps = {
   open: boolean
@@ -57,7 +59,10 @@ type FormErrors = {
 export function AboutModal({ open, onClose }: AboutModalProps) {
   const [values, setValues] = useState({ name: '', email: '', message: '' })
   const [errors, setErrors] = useState<FormErrors>({})
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>(
+    'idle',
+  )
+  const [feedback, setFeedback] = useState('')
 
   // close on Escape + lock body scroll while open
   useEffect(() => {
@@ -86,20 +91,29 @@ export function AboutModal({ open, onClose }: AboutModalProps) {
     return Object.keys(next).length === 0
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (status === 'sending') return
     if (!validate()) return
+
     setStatus('sending')
-    // no backend yet — log to console
-    console.log('[v0] Contact form submitted:', values)
-    setTimeout(() => {
+    setFeedback('')
+
+    const result = await sendContact(values)
+
+    if (result.ok) {
       setStatus('sent')
+      setFeedback('Message sent successfully!')
+      setValues({ name: '', email: '', message: '' })
       setTimeout(() => {
         setStatus('idle')
-        setValues({ name: '', email: '', message: '' })
+        setFeedback('')
         onClose()
-      }, 1400)
-    }, 800)
+      }, 1800)
+    } else {
+      setStatus('error')
+      setFeedback(result.error)
+    }
   }
 
   return (
@@ -219,8 +233,8 @@ export function AboutModal({ open, onClose }: AboutModalProps) {
 
                 <button
                   type="submit"
-                  disabled={status !== 'idle'}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5 disabled:opacity-70"
+                  disabled={status === 'sending'}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {status === 'sending' && (
                     <>
@@ -234,13 +248,32 @@ export function AboutModal({ open, onClose }: AboutModalProps) {
                       Message sent!
                     </>
                   )}
-                  {status === 'idle' && (
+                  {(status === 'idle' || status === 'error') && (
                     <>
                       Send Message
                       <Send className="h-4 w-4" />
                     </>
                   )}
                 </button>
+
+                {feedback && (
+                  <div
+                    role="status"
+                    aria-live="polite"
+                    className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm ${
+                      status === 'error'
+                        ? 'border-destructive/30 bg-destructive/10 text-destructive'
+                        : 'border-primary/30 bg-primary/10 text-primary'
+                    }`}
+                  >
+                    {status === 'error' ? (
+                      <AlertCircle className="h-4 w-4 shrink-0" />
+                    ) : (
+                      <CheckCircle2 className="h-4 w-4 shrink-0" />
+                    )}
+                    {feedback}
+                  </div>
+                )}
               </form>
             </div>
           </motion.div>
