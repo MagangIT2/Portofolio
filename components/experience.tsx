@@ -12,10 +12,7 @@ export function Experience() {
     <section id="work" className="border-b border-border">
       <div className="mx-auto max-w-6xl px-6 py-24">
         <div className="mb-14">
-          <p className="mb-3 font-mono text-xs uppercase tracking-widest text-primary">
-            01 / Experience
-          </p>
-          <h2 className="text-balance text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
+          <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary md:text-4xl">
             Work history
           </h2>
         </div>

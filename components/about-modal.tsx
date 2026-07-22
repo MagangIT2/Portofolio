@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 
 import { useEffect, useState, type FormEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -26,28 +27,8 @@ const bioSections = [
   {
     icon: User,
     title: 'About Me',
-    body: 'Hi, I\u2019m Ahmad Febriansyah, a Full Stack Developer who loves turning complex problems into clean, reliable products.',
-  },
-  {
-    icon: Briefcase,
-    title: 'Experience',
-    body: 'Building end-to-end web applications and designing data pipelines that move and transform information at scale.',
-  },
-  {
-    icon: Wrench,
-    title: 'Skills',
-    body: 'Laravel, PHP, C#, .NET, Apache NiFi, JavaScript, jQuery, MySQL, HTML5 and CSS3.',
-  },
-  {
-    icon: Target,
-    title: 'Current Focus',
-    body: 'Crafting performant full-stack systems and robust data integration workflows.',
-  },
-  {
-    icon: Heart,
-    title: 'Interests',
-    body: 'Open-source, clean architecture, automation, and continuously learning new technologies.',
-  },
+    body: "Hi, I am Ryan, a Full Stack Developer with over 4 years of experience in building web applications and business solutions. I specialize in developing scalable web applications, optimizing SQL databases, performing database migrations, and analyzing data to deliver efficient and reliable solutions. Beyond software development, I'm passionate about sharing knowledge. I'm currently growing as a content creator, creating content about the latest trends in IT, software development, and technology to help others learn and stay updated. If you're interested in collaborating or need assistance with a project, feel free to reach out with your project details. I'd be happy to discuss how I can help. Thank you!.",
+  }
 ]
 
 type FormErrors = {
@@ -162,6 +143,19 @@ export function AboutModal({ open, onClose }: AboutModalProps) {
                 }}
               />
               <div className="relative space-y-6">
+                <div className="relative mx-auto h-32 w-32 sm:h-40 sm:w-40 md:h-48 md:w-48 lg:h-56 lg:w-56">
+                  <div className="absolute inset-0 rounded-full bg-primary/20 blur-xl"/>
+
+                  <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-primary/30 shadow-xl">
+                    <Image
+                      src="/images/foto_diri.png"
+                      alt="Ahmad Febriansyah"
+                      fill
+                      priority
+                      className="object-cover object-center"
+                    />
+                  </div>
+                </div>
                 {bioSections.map((section) => (
                   <div key={section.title} className="flex gap-3">
                     <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">

@@ -22,20 +22,20 @@ const skills: Skill[] = [
     src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg',
   },
   {
+    name: 'Next JS',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',
+  },
+  {
+    name: 'Node JS',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+  },
+  {
+    name: 'Vercel',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg',
+  },
+  {
     name: 'PHP',
     src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg',
-  },
-  {
-    name: 'C#',
-    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg',
-  },
-  {
-    name: '.NET',
-    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg',
-  },
-  {
-    name: 'Apache NiFi',
-    src: '/icons/apache-nifi.svg',
   },
   {
     name: 'JavaScript',
@@ -46,8 +46,8 @@ const skills: Skill[] = [
     src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jquery/jquery-original.svg',
   },
   {
-    name: 'Database',
-    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
+    name: 'Tailwind CSS',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
   },
   {
     name: 'HTML5',
@@ -57,6 +57,22 @@ const skills: Skill[] = [
     name: 'CSS3',
     src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg',
   },
+  {
+    name: 'Apache NiFi',
+    src: '/icons/apache-nifi.svg',
+  },
+  {
+    name: 'Sql Server, Mysql, Oracle, MariaDB, PostgreSQL',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-original.svg',
+  },
+  {
+    name: 'Visual Studio',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/visualstudio/visualstudio-original.svg',
+  },
+  {
+    name: 'Vs Code',
+    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg',
+  }
 ]
 
 function prefersReducedMotion() {
@@ -155,20 +171,13 @@ export function Skills() {
   return (
     <section
       id="skills"
-      className="border-b border-border bg-[#F1F5F9] dark:bg-[#1E293B]"
+      className="border-b border-border bg-[#F1F5F9] dark:bg-[#0B1120]"
     >
       <div className="mx-auto max-w-6xl px-6 py-24">
         <div className="mb-14">
-          <p className="mb-3 font-mono text-xs uppercase tracking-widest text-primary">
-            03 / Skills
-          </p>
-          <h2 className="text-balance text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-            Tools I work with
+          <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+            Skills & Tools
           </h2>
-          <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
-            Drag, swipe, scroll, or use the arrow keys to explore the
-            technologies I use.
-          </p>
         </div>
 
         <div
@@ -182,7 +191,7 @@ export function Skills() {
           onWheel={onWheel}
           onKeyDown={onKeyDown}
           tabIndex={0}
-          className={`flex snap-x snap-mandatory gap-5 overflow-x-auto pb-6 outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [-ms-overflow-style:none] [scrollbar-width:none] motion-reduce:scroll-auto [&::-webkit-scrollbar]:hidden ${
+          className={`flex snap-x snap-mandatory gap-5 overflow-x-auto pb-6 pt-3 outline-none focus-visible:ring-2 focus-visible:ring-primary/50 [-ms-overflow-style:none] [scrollbar-width:none] motion-reduce:scroll-auto [&::-webkit-scrollbar]:hidden ${
             isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
           }`}
           style={{ scrollBehavior: 'smooth' }}
@@ -194,9 +203,9 @@ export function Skills() {
               key={skill.name}
               role="option"
               aria-selected={false}
-              className="group flex w-40 shrink-0 snap-start flex-col items-center gap-4 rounded-2xl border border-border bg-card p-6 shadow-sm transition-all duration-300 ease-out hover:-translate-y-[5px] hover:border-primary/40 hover:shadow-lg motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:w-[calc((100%-1.25rem)/2)] md:w-[calc((100%-2.5rem)/3)] lg:w-[calc((100%-5rem)/5)]"
+              className="group flex w-40 shrink-0 snap-start flex-col items-center gap-4 rounded-2xl border border-border bg-white/5 backdrop-blur-xl border border-white/10 p-6 shadow-sm transition-all duration-300 ease-out hover:-translate-y-[5px] hover:border-primary/40 hover:shadow-lg motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:w-[calc((100%-1.25rem)/2)] md:w-[calc((100%-2.5rem)/3)] lg:w-[calc((100%-5rem)/5)]"
             >
-              <span className="flex h-16 w-16 items-center justify-center">
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/5 border border-white/10 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/10 group-hover:border-primary/40 ">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={skill.src || '/placeholder.svg'}
@@ -205,7 +214,7 @@ export function Skills() {
                   height={56}
                   draggable={false}
                   loading="lazy"
-                  className="h-14 w-14 object-contain transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none"
+                  className="h-9 w-9 object-contain transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none"
                 />
               </span>
               <span className="text-center text-sm font-medium text-foreground">

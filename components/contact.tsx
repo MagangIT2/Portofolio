@@ -3,21 +3,42 @@
 import { useState, type FormEvent } from 'react'
 import { Mail, Check, Send } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from '@/components/brand-icons'
+import { sendContact } from '@/app/actions/send-contact'
 
 const socials = [
-  { icon: GithubIcon, label: 'GitHub', href: 'https://github.com' },
-  { icon: LinkedinIcon, label: 'LinkedIn', href: 'https://linkedin.com' },
-  { icon: Mail, label: 'Email', href: 'mailto:hello@ahmadfebriansyah.dev' },
+  { icon: GithubIcon, label: 'GitHub', href: 'https://github.com/AhmadFebriansyah' },
+  { icon: LinkedinIcon, label: 'LinkedIn', href: 'https://www.linkedin.com/in/ahmad-febriansyah/' },
+  { icon: Mail, label: 'Email', href: 'mailto:hello@ahmadfebriansyah662@gmail.com' },
 ]
 
 export function Contact() {
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setSubmitted(true)
-    e.currentTarget.reset()
-    window.setTimeout(() => setSubmitted(false), 4000)
+    const form = e.currentTarget // simpan referensi form dulu, sebelum await
+    setSending(true)
+    setError(null)
+
+    const formData = new FormData(form)
+    const result = await sendContact({
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      message: formData.get('message') as string,
+    })
+
+    setSending(false)
+
+    if (result.ok) {
+      setSubmitted(true)
+      form.reset() // pakai variabel form, bukan e.currentTarget
+      window.setTimeout(() => setSubmitted(false), 4000)
+    } else {
+      setError(result.error)
+      window.setTimeout(() => setError(null), 5000)
+    }
   }
 
   return (
@@ -25,10 +46,7 @@ export function Contact() {
       <div className="mx-auto max-w-6xl px-6 py-24">
         <div className="grid gap-12 md:grid-cols-2">
           <div>
-            <p className="mb-3 font-mono text-xs uppercase tracking-widest text-primary">
-              04 / Contact
-            </p>
-            <h2 className="text-balance text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
+            <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary md:text-4xl">
               Let&apos;s build something together
             </h2>
             <p className="mt-5 max-w-md text-pretty leading-relaxed text-muted-foreground">
@@ -107,18 +125,20 @@ export function Contact() {
               </div>
               <button
                 type="submit"
+                disabled={sending}
                 className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
               >
                 {submitted ? (
-                  <>
-                    <Check className="h-4 w-4" /> Message sent
-                  </>
+                  <><Check className="h-4 w-4" /> Message sent</>
+                ) : sending ? (
+                  'Sending...'
                 ) : (
-                  <>
-                    <Send className="h-4 w-4" /> Send message
-                  </>
+                  <><Send className="h-4 w-4" /> Send message</>
                 )}
               </button>
+              {error && (
+                <p className="text-sm text-red-500">{error}</p>
+              )}
             </div>
           </form>
         </div>

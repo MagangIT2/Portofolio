@@ -6,7 +6,7 @@ export function SiteFooter() {
           © {new Date().getFullYear()} Ahmad Febriansyah
         </p>
         <p className="font-mono text-xs text-muted-foreground">
-          Built with Next.js · Designed &amp; developed with care
+          Designed &amp; developed with care
         </p>
       </div>
     </footer>

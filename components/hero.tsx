@@ -12,10 +12,10 @@ import {
 import { AboutModal } from '@/components/about-modal'
 
 // placeholder URLs
-const github_url = 'https://github.com'
-const linkedin_url = 'https://linkedin.com'
+const github_url = 'https://github.com/AhmadFebriansyah'
+const linkedin_url = 'https://www.linkedin.com/in/ahmad-febriansyah/'
 const tiktok_url = 'https://tiktok.com'
-const whatsapp_url = 'https://wa.me/000000000'
+const whatsapp_url = 'https://wa.me/+6281298068846'
 
 const socials = [
   { icon: GithubIcon, label: 'GitHub', href: github_url },
@@ -63,9 +63,9 @@ export function Hero() {
               initial="hidden"
               animate="show"
               variants={fadeUp}
-              className="text-balance text-5xl font-bold leading-[1.02] tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-8xl"
+              className="text-balance text-4xl font-bold leading-[1.02] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl"
             >
-              Ahmad Febriansyah<span className="text-primary">.</span>
+              Ahmad Febriansyah
             </motion.h1>
 
             <motion.p
