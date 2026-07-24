@@ -14,14 +14,14 @@ import { AboutModal } from '@/components/about-modal'
 // placeholder URLs
 const github_url = 'https://github.com/AhmadFebriansyah'
 const linkedin_url = 'https://www.linkedin.com/in/ahmad-febriansyah/'
-const tiktok_url = 'https://tiktok.com'
-const whatsapp_url = 'https://wa.me/+6281298068846'
+const tiktok_url = 'https://www.tiktok.com/@programmerpemula17?_r=1&_t=ZS-98H3Afibpqv'
+// const whatsapp_url = 'https://wa.me/+6281298068846'
 
 const socials = [
   { icon: GithubIcon, label: 'GitHub', href: github_url },
   { icon: LinkedinIcon, label: 'LinkedIn', href: linkedin_url },
   { icon: TiktokIcon, label: 'TikTok', href: tiktok_url },
-  { icon: WhatsappIcon, label: 'WhatsApp', href: whatsapp_url },
+  // { icon: WhatsappIcon, label: 'WhatsApp', href: whatsapp_url },
 ]
 
 const fadeUp = {

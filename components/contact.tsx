@@ -2,13 +2,14 @@
 
 import { useState, type FormEvent } from 'react'
 import { Mail, Check, Send } from 'lucide-react'
-import { GithubIcon, LinkedinIcon } from '@/components/brand-icons'
+import { GithubIcon, LinkedinIcon, TiktokIcon } from '@/components/brand-icons'
 import { sendContact } from '@/app/actions/send-contact'
 
 const socials = [
   { icon: GithubIcon, label: 'GitHub', href: 'https://github.com/AhmadFebriansyah' },
   { icon: LinkedinIcon, label: 'LinkedIn', href: 'https://www.linkedin.com/in/ahmad-febriansyah/' },
-  { icon: Mail, label: 'Email', href: 'mailto:hello@ahmadfebriansyah662@gmail.com' },
+  { icon: TiktokIcon, label: 'Tiktok', href: 'https://www.tiktok.com/@programmerpemula17?_r=1&_t=ZS-98H3Afibpqv' },
+  // { icon: Mail, label: 'Email', href: 'mailto:hello@ahmadfebriansyah662@gmail.com' },
 ]
 
 export function Contact() {

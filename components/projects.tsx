@@ -2,14 +2,15 @@
 
 import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { projects } from '@/lib/projects'
+import { PdfViewerModal } from './pdf-viewer-modal'
 
 export function Projects() {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
+  const [activePdf, setActivePdf] = useState<string | null>(null)
 
   const [isDragging, setIsDragging] = useState(false)
   const dragStartX = useRef(0)
@@ -38,7 +39,7 @@ export function Projects() {
   function scrollByAmount(direction: 'left' | 'right') {
     const el = scrollRef.current
     if (!el) return
-    const cardWidth = el.querySelector('a')?.clientWidth ?? 360
+    const cardWidth = el.querySelector('button')?.clientWidth ?? 360
     el.scrollBy({
       left: direction === 'left' ? -(cardWidth + 24) : cardWidth + 24,
       behavior: 'smooth',
@@ -67,12 +68,9 @@ export function Projects() {
     setIsDragging(false)
   }
 
-  function handleClickCapture(e: React.MouseEvent) {
-    // Prevent the click-to-navigate from firing right after a drag
-    if (didDrag.current) {
-      e.preventDefault()
-      e.stopPropagation()
-    }
+  function handleCardClick(pdfUrl?: string) {
+    if (didDrag.current) return // abaikan klik kalau baru saja drag
+    if (pdfUrl) setActivePdf(pdfUrl)
   }
 
   return (
@@ -91,7 +89,7 @@ export function Projects() {
               aria-label="Previous project"
               className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-30"
             >
-              <ChevronLeft className="h-5 w-5" />
+              ←
             </button>
             <button
               type="button"
@@ -100,7 +98,7 @@ export function Projects() {
               aria-label="Next project"
               className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-30"
             >
-              <ChevronRight className="h-5 w-5" />
+              →
             </button>
           </div>
         </div>
@@ -111,17 +109,16 @@ export function Projects() {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
-          onClickCapture={handleClickCapture}
           className={`flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2 pt-1 outline-none [-ms-overflow-style:none] [scrollbar-width:none] motion-reduce:scroll-auto [&::-webkit-scrollbar]:hidden ${
             isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
           }`}
         >
           {projects.map((project) => (
-            <Link
+            <button
               key={project.slug}
-              href={`/projects/${project.slug}`}
-              draggable={false}
-              className="group flex w-[85%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
+              type="button"
+              onClick={() => handleCardClick(project.pdfUrl)}
+              className="group flex w-[85%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-card text-left transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
             >
               <div className="relative aspect-[16/10] overflow-hidden border-b border-border">
                 <Image
@@ -155,10 +152,14 @@ export function Projects() {
                   ))}
                 </ul>
               </div>
-            </Link>
+            </button>
           ))}
         </div>
       </div>
+
+      {activePdf && (
+        <PdfViewerModal url={activePdf} onClose={() => setActivePdf(null)} />
+      )}
     </section>
   )
 }

@@ -5,6 +5,7 @@ export type Project = {
   longDescription?: string
   image: string
   tech: string[]
+  pdfUrl?: string // <- tambahan baru
 }
 
 export const projects: Project[] = [
@@ -12,11 +13,12 @@ export const projects: Project[] = [
     slug: 'pos-forisa',
     title: 'Web-Based Point of Sale (POS) System',
     description:
-      'An internal web application to manage real-time sales, transactions, and inventory across multiple outlets with live dashboards for event PRJ and SIAL Interfood.',
+      'An internal web application to manage real-time sales, transactions, and inventory across multiple outlets with live dashboards for event PRJ, SIAL Interfood and PopIceXJKT48.',
     longDescription:
       'A comprehensive point-of-sale system built to handle real-time transactions across multiple outlets simultaneously. The system provides live dashboards for tracking sales performance during major events like PRJ and SIAL Interfood, with inventory synchronization to prevent overselling and detailed reporting for management.',
     image: '/projects/POS/pos_forisa.png',
     tech: ['Laravel', 'PHP', 'JavaScript', 'Jquery', 'Maria DB', 'HTML', 'CSS'],
+    pdfUrl: '/projects/pdf/pos.pdf',
   },
   {
     slug: 'database-migration-nifi',
@@ -35,8 +37,9 @@ export const projects: Project[] = [
       'Developed an executive dashboard for the Board of Directors (BOD) to track new product development, project timelines, managers leave and business travel schedules, and upcoming meetings.',
     longDescription:
       'An executive-level dashboard giving the Board of Directors a single view into ongoing initiatives — from new product launches and project timelines to team availability and upcoming meetings. Designed for quick scanning with minimal clicks to find critical information.',
-    image: '/projects/npl/npl.png',
+    image: '/projects/npl/npl2.png',
     tech: ['Laravel', 'PHP', 'JavaScript', 'Jquery', 'Sql Server', 'HTML', 'CSS'],
+    pdfUrl: '/projects/pdf/NPL.pdf',
   },
   {
     slug: 'comming soon',

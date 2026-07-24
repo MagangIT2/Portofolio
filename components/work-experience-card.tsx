@@ -22,7 +22,11 @@ export function WorkExperienceCard({
           alt={`${experience.company} logo`}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+          className={`object-contain p-4 transition-transform duration-500 ${
+            experience.id === 'gkd'
+              ? 'scale-190 group-hover:scale-195'
+              : 'group-hover:scale-105'
+          }`}
         />
       </div>
 
