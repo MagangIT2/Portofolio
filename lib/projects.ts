@@ -37,7 +37,7 @@ export const projects: Project[] = [
       'Developed an executive dashboard for the Board of Directors (BOD) to track new product development, project timelines, managers leave and business travel schedules, and upcoming meetings.',
     longDescription:
       'An executive-level dashboard giving the Board of Directors a single view into ongoing initiatives — from new product launches and project timelines to team availability and upcoming meetings. Designed for quick scanning with minimal clicks to find critical information.',
-    image: '/projects/npl/npl2.png',
+    image: '/projects/NPL/npl2.png',
     tech: ['Laravel', 'PHP', 'JavaScript', 'Jquery', 'Sql Server', 'HTML', 'CSS'],
     pdfUrl: '/projects/pdf/NPL.pdf',
   },
