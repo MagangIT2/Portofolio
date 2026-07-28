@@ -1,10 +1,10 @@
 export type Project = {
   slug: string
   title: string
-  description: string
+  description?: string
   longDescription?: string
   image: string
-  tech: string[]
+  tech?: string[]
   pdfUrl?: string // <- tambahan baru
 }
 
@@ -29,6 +29,7 @@ export const projects: Project[] = [
       'Led the end-to-end migration of legacy data sources into a unified PostgreSQL platform using Apache NiFi for ETL pipelines. This centralized data platform significantly improved query performance and gave the Sales Analytics team self-service access to clean, structured data.',
     image: '/projects/migrasi.png',
     tech: ['Apache NiFi', 'PostgreSQL', 'ETL', 'SQL Server', 'Azure SQL'],
+    pdfUrl: '/projects/pdf/Migrasi Database.pdf',
   },
   {
     slug: 'dashboard-npl',
@@ -48,8 +49,9 @@ export const projects: Project[] = [
       'Developed the Commitment Marketing Program, a tier-based discount system that rewards distributors with higher discounts based on their purchase volume, according to predefined business rules.',
     longDescription:
       'An executive-level dashboard giving the Board of Directors a single view into ongoing initiatives — from new product launches and project timelines to team availability and upcoming meetings. Designed for quick scanning with minimal clicks to find critical information.',
-    image: '/images/coming_soon.webp',
+    image: '/images/komitmen.png',
     tech: ['Laravel', 'PHP', 'JavaScript', 'Jquery', 'Sql Server', 'HTML', 'CSS'],
+    pdfUrl: '/projects/pdf/Komitmen.pdf',
   },
   {
     slug: 'comming soon2',

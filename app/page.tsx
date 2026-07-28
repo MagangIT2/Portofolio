@@ -3,6 +3,7 @@ import { Hero } from '@/components/hero'
 import { Experience } from '@/components/experience'
 import { Projects } from '@/components/projects'
 import { Skills } from '@/components/skills'
+import { Certificates } from '@/components/certificates'
 import { Contact } from '@/components/contact'
 import { SiteFooter } from '@/components/site-footer'
 
@@ -15,6 +16,7 @@ export default function Page() {
         <Experience />
         <Projects />
         <Skills />
+        <Certificates />
         <Contact />
       </main>
       <SiteFooter />

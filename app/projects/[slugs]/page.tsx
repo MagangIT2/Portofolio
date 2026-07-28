@@ -20,7 +20,7 @@ export default function ProjectDetailPage({
     notFound()
   }
 
-  return (
+    return (
     <main className="mx-auto max-w-4xl px-6 py-16">
       <Link
         href="/#projects"
@@ -45,20 +45,24 @@ export default function ProjectDetailPage({
         {project.title}
       </h1>
 
-      <ul className="mt-4 flex flex-wrap gap-2">
-        {project.tech.map((tech) => (
-          <li
-            key={tech}
-            className="rounded-full border border-border bg-secondary/40 px-2.5 py-1 font-mono text-[11px] text-muted-foreground"
-          >
-            {tech}
-          </li>
-        ))}
-      </ul>
+      {project.tech && project.tech.length > 0 && (
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {project.tech.map((tech) => (
+            <li
+              key={tech}
+              className="rounded-full border border-border bg-secondary/40 px-2.5 py-1 font-mono text-[11px] text-muted-foreground"
+            >
+              {tech}
+            </li>
+          ))}
+        </ul>
+      )}
 
-      <p className="mt-6 text-pretty leading-relaxed text-muted-foreground">
-        {project.longDescription || project.description}
-      </p>
+      {(project.longDescription || project.description) && (
+        <p className="mt-6 text-pretty leading-relaxed text-muted-foreground">
+          {project.longDescription || project.description}
+        </p>
+      )}
 
       {project.pdfUrl && <ProjectPdfButton pdfUrl={project.pdfUrl} />}
     </main>
