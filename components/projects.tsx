@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, ExternalLink } from 'lucide-react'
 import { projects } from '@/lib/projects'
 import { PdfViewerModal } from './pdf-viewer-modal'
 
@@ -69,7 +69,7 @@ export function Projects() {
   }
 
   function handleCardClick(pdfUrl?: string) {
-    if (didDrag.current) return // abaikan klik kalau baru saja drag
+    if (didDrag.current) return
     if (pdfUrl) setActivePdf(pdfUrl)
   }
 
@@ -141,16 +141,30 @@ export function Projects() {
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
                   {project.description}
                 </p>
-                <ul className="mt-5 flex flex-wrap gap-2">
-                  {project.tech.map((tech) => (
-                    <li
-                      key={tech}
-                      className="rounded-full border border-border bg-secondary/40 px-2.5 py-1 font-mono text-[11px] text-muted-foreground"
-                    >
-                      {tech}
-                    </li>
-                  ))}
-                </ul>
+
+                {project.tech && project.tech.length > 0 && (
+                  <ul className="mt-5 flex flex-wrap gap-2">
+                    {project.tech.map((tech) => (
+                      <li
+                        key={tech}
+                        className="rounded-full border border-border bg-secondary/40 px-2.5 py-1 font-mono text-[11px] text-muted-foreground"
+                      >
+                        {tech}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {project.liveUrl && (
+                   <a href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg border border-primary/40 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10">
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    Live Demo
+                  </a>
+                )}
               </div>
             </button>
           ))}

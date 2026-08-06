@@ -6,9 +6,21 @@ export type Project = {
   image: string
   tech?: string[]
   pdfUrl?: string // <- tambahan baru
+  liveUrl?: string
 }
 
 export const projects: Project[] = [
+  {
+    slug: 'personal-trainer',
+    title: 'Chatbot Personal Trainner',
+    description:
+      'An AI-powered chatbot personal trainer that provides personalized workout guidance and fitness advice using conversational AI.',
+    longDescription:
+      'A chatbot personal trainer application built using Gemini API to deliver conversational, personalized fitness coaching.',
+    image: '/projects/pt.png',
+    tech: ['Gemini', 'Gemini API', 'Node JS', 'Vanilla JS', 'HTML', 'CSS'],
+    liveUrl: 'https://personal-trainer-eta-six.vercel.app/',
+  },
   {
     slug: 'pos-forisa',
     title: 'Web-Based Point of Sale (POS) System',
